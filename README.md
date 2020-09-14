@@ -8,10 +8,10 @@ Optei por desenvolver o projeto usando as seguinter ferramentas/tecnologias:
 - TypeScript
 
 ## Requisitos
-Ao clonar o repositório, abra o projeto e pelo terminal ou mesmo pelo terminal do Visual Studio Code e rode o comando 'yarn', isso irá baixar todas as dependências do projeto em sua máquina para poder ser executado de maneira local.
+Ao clonar o repositório, abra o projeto e pelo terminal ou mesmo pelo terminal do Visual Studio Code e rode o comando `yarn`, isso irá baixar todas as dependências do projeto em sua máquina para poder ser executado de maneira local.
 
 ## Executando o projeto
-Depois de todas as dependências instaladas, digite o comando 'yarn dev:server' para rodar o servidor de maneira local.
+Depois de todas as dependências instaladas, digite o comando `yarn dev:server` para rodar o servidor de maneira local.
 Após o servidor começar a rodar, entre no navegador e digite 'http://localhost:3333/' para receber as instruções.
 
 ## Considerações
