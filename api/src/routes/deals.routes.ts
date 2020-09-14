@@ -7,11 +7,12 @@ const dealsRouter = Router();
 
 dealsRouter.get('/wonlist', async (req, res) => {
   try {
-    // getting all deals with won status
+    // Pegando todas as deals com status won do Pipedrive
     const dealsWon = await pipedriveApi.get(
       `/deals?status=won&start=0&api_token=${pipedriveToken.api_token}`,
     );
 
+    // Salvando todas as deals em data
     const { data } = dealsWon.data;
 
     return res.json(data);

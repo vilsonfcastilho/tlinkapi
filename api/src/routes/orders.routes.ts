@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import utf8 from 'utf8';
 
 import pipedriveApi from '../services/pipedriveApi';
 import blingApi from '../services/blingApi';
@@ -7,6 +8,19 @@ import { pipedriveToken, blingToken } from '../config/tokens';
 import createOrder from '../utils/createOrder';
 
 const ordersRouter = Router();
+
+ordersRouter.get('/list', async (req, res) => {
+  try {
+    // Pegando todas os pedidos do Bling
+    const orders = await blingApi.get(
+      `/pedidos/json?apikey=${blingToken.apikey}`,
+    );
+
+    return res.json(orders.data);
+  } catch {
+    return res.json({ message: 'Não foi possível litsar as orders.' });
+  }
+});
 
 ordersRouter.post('/create', async (req, res) => {
   try {
@@ -21,11 +35,11 @@ ordersRouter.post('/create', async (req, res) => {
     // Formatando as deals para enviar no padrão do Bling
     const deals = data.map(deal => ({
       pedido: {
-        numero: 1, // deal.id
+        numero: deal.id,
         cliente: {
-          nome: 'Empresa X', // deal.org_name
+          nome: deal.org_name,
           cpf_cnpj: '00.000.000/0000-1',
-          endereco: 'Rua Visconde de São Gabriel', // deal.org_id.address
+          endereco: deal.org_id.address,
           numero: '000',
           bairro: 'Cidade Alta',
           cep: '95.700-000',
@@ -33,17 +47,17 @@ ordersRouter.post('/create', async (req, res) => {
           uf: 'RS',
         },
         volume: {
-          servico: 'Venda de produto X', // deal.title
+          servico: deal.title,
         },
         item: {
           codigo: 185,
-          descricao: 'Venda de produto X', // deal.title
+          descricao: deal.title,
           un: 'Pç',
-          qtde: 300, // deal.products_count
-          vlr_unit: 10,
+          qtde: deal.products_count,
+          vlr_unit: 100,
         },
         parcela: {
-          vlr: 3000, // deal.value
+          vlr: deal.value,
         },
       },
     }));
@@ -51,13 +65,12 @@ ordersRouter.post('/create', async (req, res) => {
     // Convertendo os pedidos do Pipedrive em xml
     const dataXml = createOrder(deals);
 
+    // Criando o pedido no Bling
     const order = await blingApi.post(
-      `/pedido/json?apikey=${blingToken.apikey}&xml=${dataXml}`,
+      utf8.encode(`/pedido/json?apikey=${blingToken.apikey}&xml=${dataXml}`),
     );
 
-    console.log(order);
-
-    return res.json({ message: 'order' });
+    return res.json(order.data);
   } catch {
     return res.json({ message: 'Não foi possível criar a Order.' });
   }

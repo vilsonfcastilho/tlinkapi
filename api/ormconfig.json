@@ -1,0 +1,7 @@
+{
+  "type": "mongodb",
+  "url": "mongodb+srv://vilson:vilson@cluster0.ygggy.mongodb.net/linkApi?retryWrites=true&w=majority",
+  "useNewUrlParser": true,
+  "synchronize": true,
+  "logging": true
+}
